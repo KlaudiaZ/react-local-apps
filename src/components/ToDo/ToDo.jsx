@@ -1,44 +1,54 @@
-import React from 'react';
+import React, { Component } from 'react';
 import './ToDo.css';
+import Tasks from './Tasks';
+import TaskCounter from './TaskCounter';
+import AddTaskForm from './AddTaskForm';
 
-const ToDo = () => {
+class ToDo extends Component {
+  state = {
+    tasks: [
+      { name: "Buy Milk", done: false },
+      { name: "Pay Taxes", done: false }
+    ]
+  }
 
-  return (
-    <section className="section todo project">
-      <div className="columns">
-        <div className="column container is-fluid">
-          <h1 className="title">ToDo React App &nbsp;  
-          <span className="has-text-success">12</span> / 20
-          </h1>
-          <div className="notification">
-            <div>
-              <label className="checkbox is-size-3">
-                <input className="todo-checkbox" type="checkbox" />
-                Buy Milk
-              </label>
-            </div>
+  handleAddTask = (val) => {
+    const newTasks = [...this.state.tasks];
+    const newTask = { name: val, done: false };
+    newTasks.push(newTask);
+    this.setState({
+      tasks: newTasks
+    });
+  }
 
-            <div>
-              <label className="checkbox is-size-3">
-                <input className="todo-checkbox" type="checkbox" />
-                Pay Taxes
-              </label>
-            </div>
+  handleCheckboxChange = (index) => {
+    const newTasks = [...this.state.tasks];
+    const changedTask = this.state.tasks[index];
+    newTasks[index] = {
+      name: changedTask.name,
+      done: !changedTask.done
+    };
+    this.setState({
+      tasks: newTasks
+    });
+  }
+
+  render () {
+    return (
+      <section className="section todo project">
+        <div className="columns">
+          <div className="column container is-fluid">
+            
+            <TaskCounter tasks={this.state.tasks} />
+            <Tasks onCheckboxChange={this.handleCheckboxChange} tasks={this.state.tasks} />
+
+            <AddTaskForm onAddTask={this.handleAddTask} />
+
           </div>
-
-          <div className="columns">
-            <div className="column is-two-thirds">
-              <input className="input is-large" placeholder="Your task description" />
-            </div>
-            <div className="column">  
-              <a className="button is-link is-large">Add Task</a>
-            </div>
-          </div>  
-
-         </div>
-      </div>  
-    </section>
-  )
+        </div>  
+      </section>
+    )
+  }
 }
 
 export default ToDo;
